@@ -4,8 +4,8 @@
 - [x] datei wird in-place verarbeitet und ersetzt
 
 - [x] muss fehler abfangen
-- [ ] muss infinite loops abfangen (extension config --> child_process.exec parameter)
-- [ ] muss zu viel output abfangen (extension config --> child_process.exec parameter)
+- [x] muss infinite loops abfangen (extension config --> child_process.exec parameter)
+- [x] muss zu viel output abfangen (extension config --> child_process.exec parameter)
 - [ ] retina über configuration path (default "retina", sodass funktioniert wenn PATH)
 
 ---

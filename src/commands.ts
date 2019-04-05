@@ -16,14 +16,39 @@ export function runOnActiveDocument(outputChannel: vscode.OutputChannel) {
             if (!uri) {
                 return;
             }
-            const path = uri[0].fsPath;
+            const scriptPath = uri[0].fsPath;
+
+            const config = vscode.workspace.getConfiguration('searchAndRetina');
+            const timeout = config.get('timeout', 3);
+            const maxBufferSize = config.get('maxOutputSize', 200*1024);
+            const retinaPath = config.get('retinaPath', 'retina');
 
             let process = child_process.exec(
-                `retina "${path}"`,
+                `${retinaPath} "${scriptPath}"`,
+                {
+                    "timeout": timeout * 1000,
+                    "maxBuffer": maxBufferSize
+                },
                 (error, stdout, stderr) => {
                     if (error) {
-                        window.showErrorMessage(`Retina failed to run with error code ${error.code}. See output window for details.`);
-                        outputChannel.appendLine(stderr);
+                        if (!error.code && error.signal === 'SIGTERM') {
+                            const msg = 'Retina aborted due to timeout.';
+                            window.showErrorMessage(msg);
+                            outputChannel.appendLine(msg);
+                            outputChannel.appendLine("Retina's output started with:");
+                            outputChannel.appendLine(stdout.substr(0, 1024));
+                        // @ts-ignore
+                        } else if (error.code === 'ERR_CHILD_PROCESS_STDIO_MAXBUFFER') {
+                            const msg = 'Retina aborted due to exceeding maximum output size.';
+                            window.showErrorMessage(msg);
+                            outputChannel.appendLine(msg);
+                            outputChannel.appendLine("Retina's output started with:");
+                            outputChannel.appendLine(stdout.substr(0, 1024));
+                        } else {
+                            window.showErrorMessage(`Retina failed to run with error code ${error.code}. See output window for details.`);
+                            outputChannel.appendLine(error.message);
+                            outputChannel.appendLine(stderr);
+                        }
                         return;
                     }
 
