@@ -26,7 +26,15 @@
 				"command": "retina.runOnActiveDocument",
 				"title": "Run On Active Document"
 			}
-		]
+		],
+		"menus": {
+			"commandPalette": [
+				{
+					"command": "retina.runOnActiveDocument",
+					"when": "editorIsOpen"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
