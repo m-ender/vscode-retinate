@@ -1,9 +1,15 @@
 import * as vscode from 'vscode';
-import { exampleBalloon } from './balloon';
+import * as child_process from 'child_process';
 
 export function activate(context: vscode.ExtensionContext) {
 	let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
-		exampleBalloon();
+		child_process.exec(
+			`retina D:/Development/Repositories/retina/Examples/hello-world.ret`,
+			(_error, stdout, _stderr) => {
+				const window = vscode.window;
+				window.showInformationMessage(stdout);
+			}
+		);
 	});
 
 	context.subscriptions.push(disposable);
