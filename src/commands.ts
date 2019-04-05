@@ -15,8 +15,15 @@ export function runOnActiveDocument() {
         window.showOpenDialog({
             openLabel: 'Select Retina Script',
             canSelectMany: false,
+            filters: {
+                'Retina scripts': ['ret'],
+                'All File Types': ['*']
+            }
         }).then(uri => {
-            window.showInformationMessage('' + uri);
+            if (uri) {
+                const path = uri[0].fsPath;
+                window.showInformationMessage(path);
+            }
 
             // TODO: use selected file
             let process = child_process.exec(
