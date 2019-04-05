@@ -1,12 +1,17 @@
-- datei (die zu bearbeiten ist) ist offen
-- ctrl+shift+P für retina command
-- file open dialog um retina script auszuwählen
-- datei wird in-place verarbeitet und ersetzt
+- [x] datei (die zu bearbeiten ist) ist offen
+- [x] ctrl+shift+P für retina command
+- [x] file open dialog um retina script auszuwählen
+- [x] datei wird in-place verarbeitet und ersetzt
 
-- muss fehler abfangen
-- muss infinite loops abfangen
+- [x] muss fehler abfangen
+- [ ] muss infinite loops abfangen
+- [ ] retina über configuration path
+
 ---
-- mehrere/alle dateien ersetzen
-- aktuelle datei als retina über andere datei laufen lassen
-- history von letzten scripts direkt verfügbar
-- run retina on selection
+- [ ] aktuelle datei als retina über andere spalte laufen lassen
+- [ ] aktuelle datei als retina über anderen offenen tab laufen lassen
+
+- [ ] run retina on selection
+- [ ] history von letzten scripts direkt verfügbar
+- [ ] mehrere/alle dateien ersetzen
+

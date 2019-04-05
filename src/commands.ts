@@ -29,13 +29,12 @@ export function runOnActiveDocument(outputChannel: vscode.OutputChannel) {
 
                     editor.edit((editBuilder: vscode.TextEditorEdit) => {
                         let invalidRange = new vscode.Range(
-                            0, 0, 
+                            0, 0,
                             editor.document.lineCount /*intentionally missing the '-1' */, 0);
                         let fullRange = editor.document.validateRange(invalidRange);
                         editBuilder.replace(fullRange, stdout);
                     }).then(success => {
-                        if (!success)
-                        {
+                        if (!success) {
                             window.showErrorMessage('It borken');
                         }
                     });
