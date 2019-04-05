@@ -10,17 +10,11 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:retina.helloWorld",
 		"onCommand:retina.runOnActiveDocument"
 	],
 	"main": "./out/retina.js",
 	"contributes": {
 		"commands": [
-			{
-				"category": "Retina",
-				"command": "retina.helloWorld",
-				"title": "Hello World"
-			},
 			{
 				"category": "Retina",
 				"command": "retina.runOnActiveDocument",
