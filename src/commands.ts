@@ -19,13 +19,15 @@ export function runOnActiveDocument() {
             window.showInformationMessage('' + uri);
 
             // TODO: use selected file
-            child_process.exec(
-                `retina D:/Development/Repositories/retina/Examples/hello-world.ret`,
+            let process = child_process.exec(
+                `retina "D:/Development/Repositories/retina/Examples/matrix-conversion.ret"`,
                 (_error, stdout, _stderr) => {
                     const window = vscode.window;
                     window.showInformationMessage(stdout);
                 }
             );
+            process.stdin.write(editor.document.getText());
+            process.stdin.end();
         });
     } else {
         window.showWarningMessage('No active document.');
