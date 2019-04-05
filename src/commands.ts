@@ -1,14 +1,7 @@
 import * as vscode from 'vscode';
 import * as child_process from 'child_process';
 
-
-export function exampleBalloon() {
-    const window = vscode.window;
-    const editor = window.activeTextEditor;
-    window.showInformationMessage(editor ? editor.document.getText() : 'Computer says "no".');
-}
-
-export function runOnActiveDocument() {
+export function runOnActiveDocument(outputChannel: vscode.OutputChannel) {
     const window = vscode.window;
     const editor = window.activeTextEditor;
     if (editor) {
@@ -27,7 +20,13 @@ export function runOnActiveDocument() {
 
             let process = child_process.exec(
                 `retina "${path}"`,
-                (_error, stdout, _stderr) => {
+                (error, stdout, stderr) => {
+                    if (error) {
+                        window.showErrorMessage(`Retina failed to run with error code ${error.code}. See output window for details.`);
+                        outputChannel.appendLine(stderr);
+                        return;
+                    }
+
                     editor.edit((editBuilder: vscode.TextEditorEdit) => {
                         let invalidRange = new vscode.Range(
                             0, 0, 
