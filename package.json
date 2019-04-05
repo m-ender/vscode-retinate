@@ -28,6 +28,27 @@
 					"when": "editorIsOpen"
 				}
 			]
+		},
+		"configuration": {
+			"type": "object",
+			"title": "Search and Retina",
+			"properties": {
+			  "searchAndRetina.retinaPath": {
+                "type": "string",
+                "default": "retina",
+                "description": "Path to Retina executable."
+              },
+              "searchAndRetina.timeout": {
+                "type": "number",
+				"default": 3,
+				"description": "Timeout before Retina gets killed, in seconds."
+              },
+              "searchAndRetina.maxOutputSize": {
+                "type": "number",
+				"default": 204800,
+				"description": "Maximum output size of Retina, in bytes."
+              }
+			}
 		}
 	},
 	"scripts": {

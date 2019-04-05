@@ -4,14 +4,21 @@
 - [x] datei wird in-place verarbeitet und ersetzt
 
 - [x] muss fehler abfangen
-- [ ] muss infinite loops abfangen
-- [ ] retina über configuration path
+- [ ] muss infinite loops abfangen (extension config --> child_process.exec parameter)
+- [ ] muss zu viel output abfangen (extension config --> child_process.exec parameter)
+- [ ] retina über configuration path (default "retina", sodass funktioniert wenn PATH)
 
 ---
-- [ ] aktuelle datei als retina über andere spalte laufen lassen
-- [ ] aktuelle datei als retina über anderen offenen tab laufen lassen
+
+- [ ] aktuelle datei als retina über andere spalte laufen lassen (window.visibleTextEditors; identifizierung über viewColumn)
+- [ ] aktuelle datei als retina über datei im workspace laufen lassen (workspace.textDocuments; showQuickPick)
 
 - [ ] run retina on selection
 - [ ] history von letzten scripts direkt verfügbar
 - [ ] mehrere/alle dateien ersetzen
 
+- [ ] rename (Retinate? Retina Transform?)
+
+---
+
+- [!] aktuelle datei als retina über anderen offenen tab laufen lassen (window.textEditors; showQuickPick)
