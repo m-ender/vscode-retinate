@@ -1,0 +1,12 @@
+- datei (die zu bearbeiten ist) ist offen
+- ctrl+shift+P für retina command
+- file open dialog um retina script auszuwählen
+- datei wird in-place verarbeitet und ersetzt
+
+- muss fehler abfangen
+- muss infinite loops abfangen
+---
+- mehrere/alle dateien ersetzen
+- aktuelle datei als retina über andere datei laufen lassen
+- history von letzten scripts direkt verfügbar
+- run retina on selection
