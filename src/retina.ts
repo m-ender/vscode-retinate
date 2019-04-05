@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
-import { exampleBalloon } from './balloon';
+import { exampleBalloon } from './commands';
 
 export function activate(context: vscode.ExtensionContext) {
-	let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
+	let disposable = vscode.commands.registerCommand('retina.helloWorld', () => {
 		exampleBalloon();
 	});
 
