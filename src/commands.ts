@@ -20,19 +20,29 @@ export function runOnActiveDocument() {
                 'All File Types': ['*']
             }
         }).then(uri => {
-            if (uri) {
-                const path = uri[0].fsPath;
-                window.showInformationMessage(path);
+            if (!uri) {
+                return;
             }
+            const path = uri[0].fsPath;
 
-            // TODO: use selected file
             let process = child_process.exec(
-                `retina "D:/Development/Repositories/retina/Examples/matrix-conversion.ret"`,
+                `retina "${path}"`,
                 (_error, stdout, _stderr) => {
-                    const window = vscode.window;
-                    window.showInformationMessage(stdout);
+                    editor.edit((editBuilder: vscode.TextEditorEdit) => {
+                        let invalidRange = new vscode.Range(
+                            0, 0, 
+                            editor.document.lineCount /*intentionally missing the '-1' */, 0);
+                        let fullRange = editor.document.validateRange(invalidRange);
+                        editBuilder.replace(fullRange, stdout);
+                    }).then(success => {
+                        if (!success)
+                        {
+                            window.showErrorMessage('It borken');
+                        }
+                    });
                 }
             );
+
             process.stdin.write(editor.document.getText());
             process.stdin.end();
         });
