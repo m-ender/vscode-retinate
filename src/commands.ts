@@ -144,12 +144,18 @@ export function retinate(scriptPath: string, input: string): Thenable<string> {
                             'message': msg,
                             'log': `${msg}\nRetina's output started with:\n${stdout.substr(0, 1024)}`
                         });
-                        // @ts-ignore
+                    // @ts-ignore
                     } else if (error.code === 'ERR_CHILD_PROCESS_STDIO_MAXBUFFER') {
                         const msg = 'Retina aborted due to exceeding maximum output size.';
                         reject({
                             'message': msg,
                             'log': `${msg}\nRetina's output started with:\n${stdout.substr(0, 1024)}`
+                        });
+                    // @ts-ignore
+                    } else if (error.code === 'ENOENT') {
+                        reject({
+                            'message': 'Retina executable not found.',
+                            'log': 'Retina executable not found. Make sure to set the correct path in the Retinate settings.'
                         });
                     } else {
                         reject({
@@ -163,8 +169,10 @@ export function retinate(scriptPath: string, input: string): Thenable<string> {
             }
         );
 
-        retinaProcess.stdin.write(input);
-        retinaProcess.stdin.end();
+        if (retinaProcess.pid) {
+            retinaProcess.stdin.write(input);
+            retinaProcess.stdin.end();
+        }
     });
 
     return promise;
