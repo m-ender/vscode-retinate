@@ -5,19 +5,11 @@ export async function runOnActiveDocument(outputChannel: vscode.OutputChannel) {
     const window = vscode.window;
     const editor = window.activeTextEditor;
     if (editor) {
-        const uri = await window.showOpenDialog({
-            openLabel: 'Select Retina Script',
-            canSelectMany: false,
-            filters: {
-                'Retina scripts': ['ret'],
-                'All File Types': ['*']
-            }
-        });
-
-        if (!uri) {
+        const scriptPath = await openRetinaFileDialog();
+        
+        if (!scriptPath) {
             return;
         }
-        const scriptPath = uri[0].fsPath;
 
         let result: string;
         try {
@@ -54,19 +46,11 @@ export async function runOnSelection(outputChannel: vscode.OutputChannel) {
     const window = vscode.window;
     const editor = window.activeTextEditor;
     if (editor) {
-        const uri = await window.showOpenDialog({
-            openLabel: 'Select Retina Script',
-            canSelectMany: false,
-            filters: {
-                'Retina scripts': ['ret'],
-                'All File Types': ['*']
-            }
-        });
-
-        if (!uri) {
+        const scriptPath = await openRetinaFileDialog();
+        
+        if (!scriptPath) {
             return;
         }
-        const scriptPath = uri[0].fsPath;
 
         const retinateResults: { selection: vscode.Selection, result: string }[] = [];
 
@@ -108,6 +92,23 @@ export async function runOnSelection(outputChannel: vscode.OutputChannel) {
     } else {
         window.showWarningMessage('No active document.');
     }
+}
+
+async function openRetinaFileDialog(): Promise<string | null> {
+    const uri = await vscode.window.showOpenDialog({
+        openLabel: 'Select Retina Script',
+        canSelectMany: false,
+        filters: {
+            'Retina scripts': ['ret'],
+            'All File Types': ['*']
+        }
+    });
+
+    if (!uri) {
+        return null;
+    }
+
+    return uri[0].fsPath;
 }
 
 export function retinate(scriptPath: string, input: string): Thenable<string> {
