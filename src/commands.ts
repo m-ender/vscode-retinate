@@ -1,43 +1,50 @@
 import * as vscode from 'vscode';
 import * as child_process from 'child_process';
 
-export function runOnActiveDocument(outputChannel: vscode.OutputChannel) {
+export async function runOnActiveDocument(outputChannel: vscode.OutputChannel) {
     const window = vscode.window;
     const editor = window.activeTextEditor;
     if (editor) {
-        window.showOpenDialog({
+        const uri = await window.showOpenDialog({
             openLabel: 'Select Retina Script',
             canSelectMany: false,
             filters: {
                 'Retina scripts': ['ret'],
                 'All File Types': ['*']
             }
-        }).then(uri => {
-            if (!uri) {
-                return;
-            }
-            const scriptPath = uri[0].fsPath;
-
-            retinate(scriptPath, editor.document.getText()).then(
-                (result) => {
-                    editor.edit((editBuilder: vscode.TextEditorEdit) => {
-                        let invalidRange = new vscode.Range(
-                            0, 0,
-                            editor.document.lineCount /*intentionally missing the '-1' */, 0);
-                        let fullRange = editor.document.validateRange(invalidRange);
-                        editBuilder.replace(fullRange, result);
-                    }).then(success => {
-                        if (!success) {
-                            window.showErrorMessage('It borken');
-                        }
-                    });
-                },
-                ({ message, log }) => {
-                    window.showErrorMessage(message);
-                    outputChannel.appendLine(log);
-                }
-            );
         });
+        
+        if (!uri) {
+            return;
+        }
+        const scriptPath = uri[0].fsPath;
+
+        let result: string;
+        try {
+            result = await retinate(scriptPath, editor.document.getText());
+        } catch ({ message, log }) {
+            window.showErrorMessage(message);
+            outputChannel.appendLine(log);
+            return;
+        }
+        
+        let success;
+        try {
+            success = await editor.edit((editBuilder: vscode.TextEditorEdit) => {
+                const invalidRange = new vscode.Range(
+                    0, 0,
+                    editor.document.lineCount /*intentionally missing the '-1' */, 0);
+                const fullRange = editor.document.validateRange(invalidRange);
+                editBuilder.replace(fullRange, result);
+            });
+        } catch (error) {
+            window.showErrorMessage(error.message);
+            return;
+        }
+           
+        if (!success) {
+            window.showErrorMessage('Changes could not be applied to document.');
+        }
     } else {
         window.showWarningMessage('No active document.');
     }
@@ -49,8 +56,8 @@ function retinate(scriptPath: string, input: string): Thenable<string> {
     const maxBufferSize = config.get('maxOutputSize', 200 * 1024);
     const retinaPath = config.get('retinaPath', 'retina');
 
-    let promise = new Promise<string>((resolve, reject) => {
-        let retinaProcess = child_process.execFile(
+    const promise = new Promise<string>((resolve, reject) => {
+        const retinaProcess = child_process.execFile(
             retinaPath,
             [scriptPath],
             {
