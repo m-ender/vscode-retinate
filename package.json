@@ -10,7 +10,8 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:retinate.runOnActiveDocument"
+		"onCommand:retinate.runOnActiveDocument",
+		"onCommand:retinate.runOnSelection"
 	],
 	"main": "./out/retinate.js",
 	"contributes": {
@@ -19,10 +20,19 @@
 				"category": "Retinate",
 				"command": "retinate.runOnActiveDocument",
 				"title": "Run On Active Document"
+			},
+			{
+				"category": "Retinate",
+				"command": "retinate.runOnSelection",
+				"title": "Run On Selection"
 			}
 		],
 		"menus": {
 			"commandPalette": [
+				{
+					"command": "retinate.runOnActiveDocument",
+					"when": "editorIsOpen"
+				},
 				{
 					"command": "retinate.runOnActiveDocument",
 					"when": "editorIsOpen"
