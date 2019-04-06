@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import * as chaistring from 'chai-string';
-import { retinate } from '../commands';
+import { retinate, retinateFromString } from '../commands';
 import { expect, use } from 'chai';
 
 use(chaistring);
@@ -34,4 +34,12 @@ suite("Extension Tests", () => {
         });
     }).timeout('5 seconds');
 
+    test("Syntax Error In Temporary File", () => {
+        return retinateFromString('(', 'foobar').then(() => {
+            assert.fail("Failure expected");
+        }, ({ message, log }) => {
+            expect(message).to.startWith('Retina failed to run');
+            expect(log).to.contain('Not enough )');
+        });
+    });
 });

@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 import * as child_process from 'child_process';
-// import * as tmp from 'tmp';
+import * as tmp from 'tmp';
+import * as fs from 'fs';
+import { promisify } from 'util';
 
 export async function runOnActiveDocument(outputChannel: vscode.OutputChannel) {
     const window = vscode.window;
@@ -112,14 +114,46 @@ async function openRetinaFileDialog(): Promise<string | null> {
     return uri[0].fsPath;
 }
 
-// function retinateFromString(script: string, input: string): Thenable<string> {
-//     tmp.file({
-//         "postfix": ".ret"
-//     }, 
-//     (err, name, fd, removeCallback) => {
+export function retinateFromString(script: string, input: string): Thenable<string> {
+    const fsWrite = promisify(fs.write);
+    const fsClose = promisify(fs.close);
+    const promise: Thenable<string> = new Promise((resolve, reject) => {
+        tmp.file({
+            "postfix": ".ret"
+        }, 
+        (err, path, fd, removeCallback) => {
+            if (err) { 
+                const msg = 'Unable to create temporary file.';
+                reject({
+                    "message": msg,
+                    "log": `${msg}\n${err.message}`
+                });
+                return;
+            }
 
-//     });
-// }
+            fsWrite(fd, script)
+                .then(() => fsClose(fd))
+                .then(() => retinate(path, input))
+                .then((result) => {
+                    resolve(result);
+                })
+                .catch((err) => {
+                    if ('message' in err && 'log' in err) {
+                        reject(err);
+                    } else {
+                        const msg = 'Unable to write to temporary file.';
+                        reject({
+                            "message": msg,
+                            "log": `${msg}\n${err.message}`
+                        });
+                    }
+                })
+                .finally(removeCallback);
+        });
+    });
+    
+    return promise;
+}
 
 export function retinate(scriptPath: string, input: string): Thenable<string> {
     const config = vscode.workspace.getConfiguration('retinate');
