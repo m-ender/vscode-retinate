@@ -18,7 +18,7 @@ export function runOnActiveDocument(outputChannel: vscode.OutputChannel) {
             }
             const scriptPath = uri[0].fsPath;
 
-            const config = vscode.workspace.getConfiguration('searchAndRetina');
+            const config = vscode.workspace.getConfiguration('retinate');
             const timeout = config.get('timeout', 3);
             const maxBufferSize = config.get('maxOutputSize', 200*1024);
             const retinaPath = config.get('retinaPath', 'retina');

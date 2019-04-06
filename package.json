@@ -1,6 +1,6 @@
 {
-	"name": "search-and-retina",
-	"displayName": "Search and Retina",
+	"name": "retinate",
+	"displayName": "Retinate",
 	"description": "Transform files through Retina scripts",
 	"version": "0.0.1",
 	"engines": {
@@ -10,40 +10,40 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:retina.runOnActiveDocument"
+		"onCommand:retinate.runOnActiveDocument"
 	],
-	"main": "./out/retina.js",
+	"main": "./out/retinate.js",
 	"contributes": {
 		"commands": [
 			{
-				"category": "Retina",
-				"command": "retina.runOnActiveDocument",
+				"category": "Retinate",
+				"command": "retinate.runOnActiveDocument",
 				"title": "Run On Active Document"
 			}
 		],
 		"menus": {
 			"commandPalette": [
 				{
-					"command": "retina.runOnActiveDocument",
+					"command": "retinate.runOnActiveDocument",
 					"when": "editorIsOpen"
 				}
 			]
 		},
 		"configuration": {
 			"type": "object",
-			"title": "Search and Retina",
+			"title": "Retinate",
 			"properties": {
-			  "searchAndRetina.retinaPath": {
+			  "retinate.retinaPath": {
                 "type": "string",
                 "default": "retina",
                 "description": "Path to Retina executable."
               },
-              "searchAndRetina.timeout": {
+              "retinate.timeout": {
                 "type": "number",
 				"default": 3,
 				"description": "Timeout before Retina gets killed, in seconds."
               },
-              "searchAndRetina.maxOutputSize": {
+              "retinate.maxOutputSize": {
                 "type": "number",
 				"default": 204800,
 				"description": "Maximum output size of Retina, in bytes."

@@ -19,7 +19,7 @@
 - [ ] history von letzten scripts direkt verfügbar
 - [ ] mehrere/alle dateien ersetzen
 
-- [ ] rename (Retinate? Retina Transform?)
+- [x] rename (Retinate? Retina Transform?)
 
 ---
 

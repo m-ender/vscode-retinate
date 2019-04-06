@@ -8,7 +8,7 @@ function registerCommand(context: vscode.ExtensionContext, name: string, callbac
 export function activate(context: vscode.ExtensionContext) {
 	const outputChannel: vscode.OutputChannel = vscode.window.createOutputChannel('Retina');
 	
-	registerCommand(context, 'retina.runOnActiveDocument', () => runOnActiveDocument(outputChannel));
+	registerCommand(context, 'retinate.runOnActiveDocument', () => runOnActiveDocument(outputChannel));
 }
 
 export function deactivate() { }
