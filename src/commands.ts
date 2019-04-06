@@ -4,7 +4,7 @@ import * as tmp from 'tmp';
 import * as fs from 'fs';
 import { promisify } from 'util';
 
-export async function runOnActiveDocument(outputChannel: vscode.OutputChannel) {
+export async function runFileOnActiveDocument(outputChannel: vscode.OutputChannel) {
     const window = vscode.window;
     const editor = window.activeTextEditor;
     if (editor) {
@@ -45,7 +45,7 @@ export async function runOnActiveDocument(outputChannel: vscode.OutputChannel) {
     }
 }
 
-export async function runOnSelection(outputChannel: vscode.OutputChannel) {
+export async function runFileOnSelection(outputChannel: vscode.OutputChannel) {
     const window = vscode.window;
     const editor = window.activeTextEditor;
     if (editor) {
