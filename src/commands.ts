@@ -3,6 +3,7 @@ import * as child_process from 'child_process';
 import * as tmp from 'tmp';
 import * as fs from 'fs';
 import { promisify } from 'util';
+import * as path from 'path';
 
 export async function runFileOnActiveDocument(outputChannel: vscode.OutputChannel) {
     const window = vscode.window;
@@ -97,6 +98,49 @@ export async function runFileOnSelection(outputChannel: vscode.OutputChannel) {
     }
 }
 
+export async function runOnVisibleEditor(outputChannel: vscode.OutputChannel) {
+    const window = vscode.window;
+    const editor = window.activeTextEditor;
+    if (editor) {
+        const targetEditor = await openEditorQuickPick();
+        
+        if (!targetEditor) {
+            return;
+        }
+
+        let result: string;
+        try {
+            result = await retinateFromString(
+                editor.document.getText(), 
+                targetEditor.document.getText());
+        } catch ({ message, log }) {
+            window.showErrorMessage(message);
+            outputChannel.appendLine(log);
+            return;
+        }
+
+        let success;
+        try {
+            success = await targetEditor.edit((editBuilder: vscode.TextEditorEdit) => {
+                const invalidRange = new vscode.Range(
+                    0, 0,
+                    targetEditor.document.lineCount /*intentionally missing the '-1' */, 0);
+                const fullRange = targetEditor.document.validateRange(invalidRange);
+                editBuilder.replace(fullRange, result);
+            });
+        } catch (error) {
+            window.showErrorMessage(error.message);
+            return;
+        }
+
+        if (!success) {
+            window.showErrorMessage('Changes could not be applied to document.');
+        }
+    } else {
+        window.showWarningMessage('No active document.');
+    }
+}
+
 async function openRetinaFileDialog(): Promise<string | null> {
     const uri = await vscode.window.showOpenDialog({
         openLabel: 'Select Retina Script',
@@ -112,6 +156,39 @@ async function openRetinaFileDialog(): Promise<string | null> {
     }
 
     return uri[0].fsPath;
+}
+
+async function openEditorQuickPick(): Promise<vscode.TextEditor | null> {
+    interface EditorQuickPick extends vscode.QuickPickItem {
+        editor: vscode.TextEditor;
+    }
+
+    const window = vscode.window;
+    const otherTextEditors = window.visibleTextEditors.filter(
+        (editor) => editor.viewColumn !== undefined 
+                    && editor !== window.activeTextEditor);
+
+    if (otherTextEditors.length === 0) {
+        return null;
+    }
+
+    const pickedItem = await window.showQuickPick<EditorQuickPick>(
+        otherTextEditors.map((editor) => ({
+            "editor": editor,
+            "label": path.basename(editor.document.fileName),
+            "detail": editor.document.fileName
+        })),
+        {
+            "matchOnDetail": true,
+            "placeHolder": "Choose an open file to process"
+        }
+    );
+
+    if (!pickedItem) {
+        return null;
+    }
+
+    return pickedItem.editor;
 }
 
 export function retinateFromString(script: string, input: string): Thenable<string> {

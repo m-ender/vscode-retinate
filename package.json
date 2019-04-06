@@ -16,7 +16,8 @@
 	],
 	"activationEvents": [
 		"onCommand:retinate.runFileOnActiveDocument",
-		"onCommand:retinate.runFileOnSelection"
+		"onCommand:retinate.runFileOnSelection",
+		"onCommand:retinate.runOnVisibleEditor"
 	],
 	"main": "./out/retinate.js",
 	"contributes": {
@@ -24,12 +25,17 @@
 			{
 				"category": "Retinate",
 				"command": "retinate.runFileOnActiveDocument",
-				"title": "Run On Active Document"
+				"title": "Run File on Active Document"
 			},
 			{
 				"category": "Retinate",
 				"command": "retinate.runFileOnSelection",
-				"title": "Run On Selection"
+				"title": "Run File on Selection"
+			},
+			{
+				"category": "Retinate",
+				"command": "retinate.runOnVisibleEditor",
+				"title": "Run on Visible Editor"
 			}
 		],
 		"menus": {
@@ -40,6 +46,10 @@
 				},
 				{
 					"command": "retinate.runFileOnActiveDocument",
+					"when": "editorIsOpen"
+				},
+				{
+					"command": "retinate.runOnVisibleEditor",
 					"when": "editorIsOpen"
 				}
 			]
