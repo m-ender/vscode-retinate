@@ -12,7 +12,7 @@
 
 ---
 
-- [ ] run retina on selection
+- [x] run retina on selection
 - [ ] aktuelle datei als retina über andere spalte laufen lassen (window.visibleTextEditors; identifizierung über viewColumn)
 - [ ] aktuelle datei als retina über datei im workspace laufen lassen (workspace.textDocuments; showQuickPick)
 

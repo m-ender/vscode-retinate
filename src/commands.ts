@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as child_process from 'child_process';
+// import * as tmp from 'tmp';
 
 export async function runOnActiveDocument(outputChannel: vscode.OutputChannel) {
     const window = vscode.window;
@@ -110,6 +111,15 @@ async function openRetinaFileDialog(): Promise<string | null> {
 
     return uri[0].fsPath;
 }
+
+// function retinateFromString(script: string, input: string): Thenable<string> {
+//     tmp.file({
+//         "postfix": ".ret"
+//     }, 
+//     (err, name, fd, removeCallback) => {
+
+//     });
+// }
 
 export function retinate(scriptPath: string, input: string): Thenable<string> {
     const config = vscode.workspace.getConfiguration('retinate');
