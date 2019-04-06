@@ -13,7 +13,7 @@ export async function runOnActiveDocument(outputChannel: vscode.OutputChannel) {
                 'All File Types': ['*']
             }
         });
-        
+
         if (!uri) {
             return;
         }
@@ -27,7 +27,7 @@ export async function runOnActiveDocument(outputChannel: vscode.OutputChannel) {
             outputChannel.appendLine(log);
             return;
         }
-        
+
         let success;
         try {
             success = await editor.edit((editBuilder: vscode.TextEditorEdit) => {
@@ -41,7 +41,7 @@ export async function runOnActiveDocument(outputChannel: vscode.OutputChannel) {
             window.showErrorMessage(error.message);
             return;
         }
-           
+
         if (!success) {
             window.showErrorMessage('Changes could not be applied to document.');
         }
@@ -50,7 +50,7 @@ export async function runOnActiveDocument(outputChannel: vscode.OutputChannel) {
     }
 }
 
-function retinate(scriptPath: string, input: string): Thenable<string> {
+export function retinate(scriptPath: string, input: string): Thenable<string> {
     const config = vscode.workspace.getConfiguration('retinate');
     const timeout = config.get('timeout', 3);
     const maxBufferSize = config.get('maxOutputSize', 200 * 1024);
@@ -82,7 +82,7 @@ function retinate(scriptPath: string, input: string): Thenable<string> {
                         });
                     } else {
                         reject({
-                            'message': `Retina failed to run with error code ${error.code}. See output window for details.`,
+                            'message': `Retina failed to run with error code [${error.code}]. See output window for details.`,
                             'log': error.message
                         });
                     }
