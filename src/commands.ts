@@ -32,7 +32,7 @@ export function runOnActiveDocument(outputChannel: vscode.OutputChannel) {
                         }
                     });
                 },
-                ({message, log}) => {
+                ({ message, log }) => {
                     window.showErrorMessage(message);
                     outputChannel.appendLine(log);
                 }
@@ -46,7 +46,7 @@ export function runOnActiveDocument(outputChannel: vscode.OutputChannel) {
 function retinate(scriptPath: string, input: string): Thenable<string> {
     const config = vscode.workspace.getConfiguration('retinate');
     const timeout = config.get('timeout', 3);
-    const maxBufferSize = config.get('maxOutputSize', 200*1024);
+    const maxBufferSize = config.get('maxOutputSize', 200 * 1024);
     const retinaPath = config.get('retinaPath', 'retina');
 
     let promise = new Promise<string>((resolve, reject) => {
@@ -55,17 +55,18 @@ function retinate(scriptPath: string, input: string): Thenable<string> {
             [scriptPath],
             {
                 "timeout": timeout * 1000,
-                "maxBuffer": maxBufferSize
+                "maxBuffer": maxBufferSize,
+                "killSignal": "SIGKILL"
             },
             (error: child_process.ExecException | null, stdout) => {
                 if (error) {
-                    if (!error.code && error.signal === 'SIGTERM') {
+                    if (!error.code && error.signal === 'SIGKILL') {
                         const msg = 'Retina aborted due to timeout.';
                         reject({
                             'message': msg,
                             'log': `${msg}\nRetina's output started with:\n${stdout.substr(0, 1024)}`
                         });
-                    // @ts-ignore
+                        // @ts-ignore
                     } else if (error.code === 'ERR_CHILD_PROCESS_STDIO_MAXBUFFER') {
                         const msg = 'Retina aborted due to exceeding maximum output size.';
                         reject({
@@ -83,7 +84,7 @@ function retinate(scriptPath: string, input: string): Thenable<string> {
                 }
             }
         );
-    
+
         retinaProcess.stdin.write(input);
         retinaProcess.stdin.end();
     });
