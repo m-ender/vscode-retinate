@@ -7,13 +7,31 @@ use(chaistring);
 
 suite("Extension Tests", () => {
 
-    test("Malformed Script", () => {
-        return retinate('retina-scripts/syntax-error.ret', 'foobar').then(() => {
+    test("Syntax Error Script", () => {
+        return retinate(__dirname + '/retina-scripts/syntax-error.ret', 'foobar').then(() => {
             assert.fail("Failure expected");
         }, ({ message, log }) => {
             expect(message).to.startWith('Retina failed to run');
             expect(log).to.contain('Not enough )');
         });
     });
+
+    test("Busy Writer Script", () => {
+        return retinate(__dirname + '/retina-scripts/busy-writer.ret', 'foobar').then(() => {
+            assert.fail("Failure expected");
+        }, ({ message, log }) => {
+            expect(message).to.startWith('Retina aborted');
+            expect(log).to.contain('exceeding maximum output size');
+        });
+    });
+
+    test("Timeout Script", () => {
+        return retinate(__dirname + '/retina-scripts/timeout.ret', 'foobar').then(() => {
+            assert.fail("Failure expected");
+        }, ({ message, log }) => {
+            expect(message).to.startWith('Retina aborted');
+            expect(log).to.contain('due to timeout');
+        });
+    }).timeout('5 seconds');
 
 });

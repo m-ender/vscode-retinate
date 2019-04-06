@@ -13,7 +13,7 @@
 		"noFallthroughCasesInSwitch": true,
 		"noUnusedParameters": true,
 		"noUnusedLocals": true,
-		"forceConsistentCasingInFileNames": true,
+		"forceConsistentCasingInFileNames": true
 	},
 	"exclude": [
 		"node_modules",
