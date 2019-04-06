@@ -33,21 +33,21 @@
 			"type": "object",
 			"title": "Retinate",
 			"properties": {
-			  "retinate.retinaPath": {
-                "type": "string",
-                "default": "retina",
-                "description": "Path to Retina executable."
-              },
-              "retinate.timeout": {
-                "type": "number",
-				"default": 3,
-				"description": "Timeout before Retina gets killed, in seconds."
-              },
-              "retinate.maxOutputSize": {
-                "type": "number",
-				"default": 204800,
-				"description": "Maximum output size of Retina, in bytes."
-              }
+				"retinate.retinaPath": {
+					"type": "string",
+					"default": "retina",
+					"description": "Path to Retina executable."
+				},
+				"retinate.timeout": {
+					"type": "number",
+					"default": 3,
+					"description": "Timeout before Retina gets killed, in seconds."
+				},
+				"retinate.maxOutputSize": {
+					"type": "number",
+					"default": 204800,
+					"description": "Maximum output size of Retina, in bytes."
+				}
 			}
 		}
 	},
