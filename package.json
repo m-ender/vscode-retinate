@@ -68,11 +68,12 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
+		"postinstall": "node ./node_modules/vscode/bin/install",
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
+		"test-scripts": "node copy-test-scripts.js",
 		"test": "npm run compile && npm run test-scripts && node ./node_modules/vscode/bin/test",
-		"test-scripts": "node copy-test-scripts.js"
+		"watch-test": "npm run test-scripts && npm run watch"
 	},
 	"devDependencies": {
 		"typescript": "^3.3.1",
