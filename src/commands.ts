@@ -141,6 +141,60 @@ export async function runOnVisibleEditor(outputChannel: vscode.OutputChannel) {
     }
 }
 
+export async function runOnSelectionInVisibleEditor(outputChannel: vscode.OutputChannel) {
+    const window = vscode.window;
+    const editor = window.activeTextEditor;
+    if (editor) {
+        const targetEditor = await openEditorQuickPick();
+        
+        if (!targetEditor) {
+            return;
+        }
+
+        const scriptSource = editor.document.getText();
+
+        const retinateResults: { selection: vscode.Selection, result: string }[] = [];
+
+        for (const selection of targetEditor.selections) {
+            const selectedText = targetEditor.document.getText(selection);
+
+            try {
+                const result = await retinateFromString(scriptSource, selectedText);
+                retinateResults.push({
+                    "selection": selection,
+                    "result": result
+                });
+            } catch ({ message, log }) {
+                window.showErrorMessage(message);
+                const from = `${selection.start.line + 1}:${selection.start.character + 1}`;
+                const to = `${selection.end.line + 1}:${selection.end.character + 1}`;
+                outputChannel.appendLine(`Failed to process selection from line ${from} to line ${to}:`);
+                outputChannel.appendLine(`${selectedText}\n`);
+                outputChannel.appendLine(log);
+                return;
+            }
+        }
+
+        let success;
+        try {
+            success = await targetEditor.edit((editBuilder: vscode.TextEditorEdit) => {
+                for (const { selection, result } of retinateResults) {
+                    editBuilder.replace(selection, result);
+                }
+            });
+        } catch (error) {
+            window.showErrorMessage(error.message);
+            return;
+        }
+
+        if (!success) {
+            window.showErrorMessage('Changes could not be applied to document.');
+        }
+    } else {
+        window.showWarningMessage('No active document.');
+    }
+}
+
 async function openRetinaFileDialog(): Promise<string | null> {
     const uri = await vscode.window.showOpenDialog({
         openLabel: 'Select Retina Script',
