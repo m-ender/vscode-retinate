@@ -50,14 +50,16 @@ function retinate(scriptPath: string, input: string): Thenable<string> {
     const retinaPath = config.get('retinaPath', 'retina');
 
     let promise = new Promise<string>((resolve, reject) => {
-        let retinaProcess = child_process.exec(
-            `${retinaPath} "${scriptPath}"`,
+        let retinaProcess = child_process.execFile(
+            retinaPath,
+            [scriptPath],
             {
                 "timeout": timeout * 1000,
                 "maxBuffer": maxBufferSize
             },
             (error, stdout) => {
                 if (error) {
+                    // @ts-ignore
                     if (!error.code && error.signal === 'SIGTERM') {
                         const msg = 'Retina aborted due to timeout.';
                         reject({
