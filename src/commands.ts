@@ -57,9 +57,8 @@ function retinate(scriptPath: string, input: string): Thenable<string> {
                 "timeout": timeout * 1000,
                 "maxBuffer": maxBufferSize
             },
-            (error, stdout) => {
+            (error: child_process.ExecException | null, stdout) => {
                 if (error) {
-                    // @ts-ignore
                     if (!error.code && error.signal === 'SIGTERM') {
                         const msg = 'Retina aborted due to timeout.';
                         reject({
