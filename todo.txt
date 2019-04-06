@@ -6,14 +6,16 @@
 - [x] muss fehler abfangen
 - [x] muss infinite loops abfangen (extension config --> child_process.exec parameter)
 - [x] muss zu viel output abfangen (extension config --> child_process.exec parameter)
-- [ ] retina über configuration path (default "retina", sodass funktioniert wenn PATH)
+- [x] retina über configuration path (default "retina", sodass funktioniert wenn PATH)
+
+- [ ] provide .NET Core builds of Retina (in retina repo)
 
 ---
 
+- [ ] run retina on selection
 - [ ] aktuelle datei als retina über andere spalte laufen lassen (window.visibleTextEditors; identifizierung über viewColumn)
 - [ ] aktuelle datei als retina über datei im workspace laufen lassen (workspace.textDocuments; showQuickPick)
 
-- [ ] run retina on selection
 - [ ] history von letzten scripts direkt verfügbar
 - [ ] mehrere/alle dateien ersetzen
 
