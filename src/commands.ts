@@ -50,6 +50,66 @@ export async function runOnActiveDocument(outputChannel: vscode.OutputChannel) {
     }
 }
 
+export async function runOnSelection(outputChannel: vscode.OutputChannel) {
+    const window = vscode.window;
+    const editor = window.activeTextEditor;
+    if (editor) {
+        const uri = await window.showOpenDialog({
+            openLabel: 'Select Retina Script',
+            canSelectMany: false,
+            filters: {
+                'Retina scripts': ['ret'],
+                'All File Types': ['*']
+            }
+        });
+
+        if (!uri) {
+            return;
+        }
+        const scriptPath = uri[0].fsPath;
+
+        const retinateResults: { selection: vscode.Selection, result: string }[] = [];
+
+        for (const selection of editor.selections) {
+            const selectedText = editor.document.getText(selection);
+
+            try {
+                const result = await retinate(scriptPath, selectedText);
+                retinateResults.push({
+                    "selection": selection,
+                    "result": result
+                });
+            } catch ({ message, log }) {
+                window.showErrorMessage(message);
+                const from = `${selection.start.line + 1}:${selection.start.character + 1}`;
+                const to = `${selection.end.line + 1}:${selection.end.character + 1}`;
+                outputChannel.appendLine(`Failed to process selection from line ${from} to line ${to}:`);
+                outputChannel.appendLine(`${selectedText}\n`);
+                outputChannel.appendLine(log);
+                return;
+            }
+        }
+
+        let success;
+        try {
+            success = await editor.edit((editBuilder: vscode.TextEditorEdit) => {
+                for (const { selection, result } of retinateResults) {
+                    editBuilder.replace(selection, result);
+                }
+            });
+        } catch (error) {
+            window.showErrorMessage(error.message);
+            return;
+        }
+
+        if (!success) {
+            window.showErrorMessage('Changes could not be applied to document.');
+        }
+    } else {
+        window.showWarningMessage('No active document.');
+    }
+}
+
 export function retinate(scriptPath: string, input: string): Thenable<string> {
     const config = vscode.workspace.getConfiguration('retinate');
     const timeout = config.get('timeout', 3);
