@@ -17,8 +17,7 @@ suite("Extension Tests", () => {
     });
 
     test("Busy Writer Script", () => {
-        return retinate(__dirname + '/retina-scripts/busy-writer.ret', 'foobar').then((result) => {
-            console.log(result);
+        return retinate(__dirname + '/retina-scripts/busy-writer.ret', 'foobar').then(() => {
             assert.fail("Failure expected");
         }, ({ message, log }) => {
             expect(message).to.startWith('Retina aborted');
