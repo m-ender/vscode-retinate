@@ -26,8 +26,8 @@
 			"description": "Build"
 		},
 		{
-			"url": "https://img.shields.io/github/release/m-ender/retinate.png",
-			"href": "https://github.com/m-ender/retinate/releases",
+			"url": "https://img.shields.io/github/release/m-ender/vscode-retinate.png",
+			"href": "https://github.com/m-ender/vscode-retinate/releases",
 			"description": "Release"		
 		}
 	],

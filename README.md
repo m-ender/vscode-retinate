@@ -1,5 +1,8 @@
 # Retinate
 
+[![Build Status](https://dev.azure.com/m-ender/Retinate/_apis/build/status/m-ender.vscode-retinate?branchName=master)](https://dev.azure.com/m-ender/Retinate/_build/latest?definitionId=1&branchName=master)
+[![Release](https://img.shields.io/github/release/m-ender/vscode-retinate.svg)](https://github.com/m-ender/vscode-retinate/releases)
+
 Retinate lets you transform text documents with the [Retina](https://github.com/m-ender/retina) programming language. It is intended for situations where VS Code's built-in *Search and Replace* is not powerful enough.
 
 ## Getting Started
