@@ -93,7 +93,7 @@
 			"properties": {
 				"retinate.retinaPath": {
 					"type": "string",
-					"default": "retina",
+					"default": "Retina",
 					"description": "Path to Retina executable."
 				},
 				"retinate.timeout": {
@@ -115,6 +115,7 @@
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
 		"test-scripts": "node copy-test-scripts.js",
+		"download-retina": "node download-retina.js",
 		"test": "npm run compile && npm run test-scripts && node ./node_modules/vscode/bin/test",
 		"watch-test": "npm run test-scripts && npm run watch"
 	},
@@ -132,6 +133,9 @@
 		"@types/chai-string": "^1.4.1",
 		"@types/node": "^10.12.21",
 		"@types/mocha": "^2.2.42",
-		"@types/tmp": "^0.1.0"
+		"@types/tmp": "^0.1.0",
+		"follow-redirects": "^1.7.0",
+		"tar-fs": "^2.0.0",
+		"gunzip-maybe": "^1.4.1"
 	}
 }

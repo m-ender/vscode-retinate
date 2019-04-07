@@ -10,7 +10,7 @@ export async function runFileOnActiveDocument(outputChannel: vscode.OutputChanne
     const editor = window.activeTextEditor;
     if (editor) {
         const scriptPath = await openRetinaFileDialog();
-        
+
         if (!scriptPath) {
             return;
         }
@@ -51,7 +51,7 @@ export async function runFileOnSelection(outputChannel: vscode.OutputChannel) {
     const editor = window.activeTextEditor;
     if (editor) {
         const scriptPath = await openRetinaFileDialog();
-        
+
         if (!scriptPath) {
             return;
         }
@@ -103,7 +103,7 @@ export async function runOnVisibleEditor(outputChannel: vscode.OutputChannel) {
     const editor = window.activeTextEditor;
     if (editor) {
         const targetEditor = await openEditorQuickPick();
-        
+
         if (!targetEditor) {
             return;
         }
@@ -111,7 +111,7 @@ export async function runOnVisibleEditor(outputChannel: vscode.OutputChannel) {
         let result: string;
         try {
             result = await retinateFromString(
-                editor.document.getText(), 
+                editor.document.getText(),
                 targetEditor.document.getText());
         } catch ({ message, log }) {
             window.showErrorMessage(message);
@@ -146,7 +146,7 @@ export async function runOnSelectionInVisibleEditor(outputChannel: vscode.Output
     const editor = window.activeTextEditor;
     if (editor) {
         const targetEditor = await openEditorQuickPick();
-        
+
         if (!targetEditor) {
             return;
         }
@@ -219,8 +219,8 @@ async function openEditorQuickPick(): Promise<vscode.TextEditor | null> {
 
     const window = vscode.window;
     const otherTextEditors = window.visibleTextEditors.filter(
-        (editor) => editor.viewColumn !== undefined 
-                    && editor !== window.activeTextEditor);
+        (editor) => editor.viewColumn !== undefined
+            && editor !== window.activeTextEditor);
 
     if (otherTextEditors.length === 0) {
         return null;
@@ -251,38 +251,38 @@ export function retinateFromString(script: string, input: string): Thenable<stri
     const promise: Thenable<string> = new Promise((resolve, reject) => {
         tmp.file({
             "postfix": ".ret"
-        }, 
-        (err, path, fd, removeCallback) => {
-            if (err) { 
-                const msg = 'Unable to create temporary file.';
-                reject({
-                    "message": msg,
-                    "log": `${msg}\n${err.message}`
-                });
-                return;
-            }
+        },
+            (err, path, fd, removeCallback) => {
+                if (err) {
+                    const msg = 'Unable to create temporary file.';
+                    reject({
+                        "message": msg,
+                        "log": `${msg}\n${err.message}`
+                    });
+                    return;
+                }
 
-            fsWrite(fd, script)
-                .then(() => fsClose(fd))
-                .then(() => retinate(path, input))
-                .then((result) => {
-                    resolve(result);
-                })
-                .catch((err) => {
-                    if ('message' in err && 'log' in err) {
-                        reject(err);
-                    } else {
-                        const msg = 'Unable to write to temporary file.';
-                        reject({
-                            "message": msg,
-                            "log": `${msg}\n${err.message}`
-                        });
-                    }
-                })
-                .finally(removeCallback);
-        });
+                fsWrite(fd, script)
+                    .then(() => fsClose(fd))
+                    .then(() => retinate(path, input))
+                    .then((result) => {
+                        resolve(result);
+                    })
+                    .catch((err) => {
+                        if ('message' in err && 'log' in err) {
+                            reject(err);
+                        } else {
+                            const msg = 'Unable to write to temporary file.';
+                            reject({
+                                "message": msg,
+                                "log": `${msg}\n${err.message}`
+                            });
+                        }
+                    })
+                    .finally(removeCallback);
+            });
     });
-    
+
     return promise;
 }
 
@@ -290,7 +290,7 @@ export function retinate(scriptPath: string, input: string): Thenable<string> {
     const config = vscode.workspace.getConfiguration('retinate');
     const timeout = config.get('timeout', 3);
     const maxBufferSize = config.get('maxOutputSize', 200 * 1024);
-    const retinaPath = config.get('retinaPath', 'retina');
+    const retinaPath = config.get('retinaPath', 'Retina');
 
     const promise = new Promise<string>((resolve, reject) => {
         const retinaProcess = child_process.execFile(
@@ -309,14 +309,14 @@ export function retinate(scriptPath: string, input: string): Thenable<string> {
                             'message': msg,
                             'log': `${msg}\nRetina's output started with:\n${stdout.substr(0, 1024)}`
                         });
-                    // @ts-ignore
+                        // @ts-ignore
                     } else if (error.code === 'ERR_CHILD_PROCESS_STDIO_MAXBUFFER') {
                         const msg = 'Retina aborted due to exceeding maximum output size.';
                         reject({
                             'message': msg,
                             'log': `${msg}\nRetina's output started with:\n${stdout.substr(0, 1024)}`
                         });
-                    // @ts-ignore
+                        // @ts-ignore
                     } else if (error.code === 'ENOENT') {
                         reject({
                             'message': 'Retina executable not found.',
