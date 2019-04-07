@@ -11,4 +11,7 @@ vsc-extension-quickstart.md
 
 *.code-workspace
 todo.txt
+
 copy-test-scripts.js
+download-retina.js
+build.yml
