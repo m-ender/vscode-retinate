@@ -5,6 +5,10 @@ jobs:
       demands: npm
     steps:
       - script: |
+      - task: DotNetCoreInstaller@0
+        displayName: 'Install .NET Core'
+        inputs:
+          version: '2.2.202'
       - task: NodeTool@0
         displayName: 'Use Node 8.x'
         inputs:
@@ -32,9 +36,9 @@ jobs:
         displayName: 'Start xvfb'
       - script: |
           export PATH=$PATH:$(pwd)/linux-x64
-          echo "Let's go!"
-          echo abc | Retina src/test/retina-scripts/hw.ret
-          Retina src/test/retina-scripts/hw.ret
+          date
+          echo abc | Retina /home/vsts/work/1/s/out/test/retina-scripts/syntax-error.ret
+          date
           node node_modules/vscode/bin/test
         displayName: 'Run tests'
         env:
