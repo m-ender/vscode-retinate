@@ -5,7 +5,9 @@ jobs:
       demands: npm
     steps:
       - script: |
-          git config --get core.autocrlf
+          git config core.autocrlf input
+          git rm --cached -r .
+          git reset --hard
       - task: DotNetCoreInstaller@0
         displayName: 'Install .NET Core'
         inputs:
