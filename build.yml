@@ -1,10 +1,48 @@
 jobs:
+  - job: Windows
+  pool:
+    name: Hosted VS2017
+    demands: npm
+  steps:
+    - task: DotNetCoreInstaller@0
+      displayName: 'Install .NET Core'
+      inputs:
+        version: '2.2.202'
+    - task: NodeTool@0
+      displayName: 'Use Node 8.x'
+      inputs:
+        versionSpec: 8.x
+    - task: Npm@1
+      displayName: 'Install dependencies'
+      inputs:
+        verbose: false
+    - task: Npm@1
+      displayName: 'Compile sources'
+      inputs:
+        command: custom
+        verbose: false
+        customCommand: 'run compile'
+    - task: Npm@1
+      displayName: 'Copy test scripts'
+      inputs:
+        command: custom
+        verbose: false
+        customCommand: 'run test-scripts'
+    - task: Npm@1
+      displayName: 'Download Retina'
+      inputs:
+        command: custom
+        verbose: false
+        customCommand: 'run download-retina'
+    - script: |
+        set PATH=%PATH%;%cd%\win-x64
+        node node_modules/vscode/bin/test
+      displayName: 'Run tests'
   - job: Linux
     pool:
       name: Hosted Ubuntu 1604
       demands: npm
     steps:
-      - script: |
       - task: DotNetCoreInstaller@0
         displayName: 'Install .NET Core'
         inputs:
@@ -42,9 +80,6 @@ jobs:
         displayName: 'Start xvfb'
       - script: |
           export PATH=$PATH:$(pwd)/linux-x64
-          date
-          echo abc | Retina /home/vsts/work/1/s/out/test/retina-scripts/syntax-error.ret
-          date
           node node_modules/vscode/bin/test
         displayName: 'Run tests'
         env:
