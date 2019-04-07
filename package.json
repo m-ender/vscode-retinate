@@ -19,8 +19,14 @@
 	"categories": [
 		"Other"
 	],
-	"keywords": ["search", "replace", "retina", "regex"],
-	"badges": [{
+	"keywords": [
+		"search",
+		"replace",
+		"retina",
+		"regex"
+	],
+	"badges": [
+		{
 			"url": "https://dev.azure.com/m-ender/Retinate/_apis/build/status/m-ender.vscode-retinate?branchName=master",
 			"href": "https://dev.azure.com/m-ender/Retinate/_build/latest?definitionId=1&branchName=master",
 			"description": "Build"
@@ -28,7 +34,7 @@
 		{
 			"url": "https://img.shields.io/github/release/m-ender/vscode-retinate.png",
 			"href": "https://github.com/m-ender/vscode-retinate/releases",
-			"description": "Release"		
+			"description": "Release"
 		}
 	],
 	"activationEvents": [
