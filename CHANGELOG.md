@@ -1,9 +1,8 @@
-# Change Log
+## v0.1.0
 
-All notable changes to the "search-and-retina" extension will be documented in this file.
+Initial release of **retinate**. Tested with [Retina v1.1.1](https://github.com/m-ender/retina/releases/tag/v1.1.1).
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
-
-- Initial release
+* Add command to run a *Retina* script on the active document
+* Add command to run a *Retina* script on the current selection
+* Add command to run a *Retina* script on a visible editor
+* Add command to run a *Retina* script on a selection of a visible editor
