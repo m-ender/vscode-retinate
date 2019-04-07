@@ -36,6 +36,6 @@ Retinate comes with a few settings:
 
 | Settings key           | Description                                                                         | Default  | type   |
 |------------------------|-------------------------------------------------------------------------------------|----------|--------|
-| retinate.retinaPath    | Path to your Retina executable. Leave as `retina` if Retina is on your system PATH. | "retina" | string |
+| retinate.retinaPath    | Path to your Retina executable. Leave as `Retina` if Retina is on your system PATH. | "Retina" | string |
 | retinate.timeout       | Time before Retinate kills any Retina process, in seconds.                          | 3        | number |
 | retinate.maxOutputSize | Maximum number of bytes that any one invocation of Retina is allowed to return      | 204800   | number |

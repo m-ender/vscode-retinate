@@ -4,6 +4,14 @@ jobs:
       name: Hosted VS2017
       demands: npm
     steps:
+      - script: |
+          git config core.autocrlf input
+          git rm --cached -r .
+          git reset --hard
+      - task: DotNetCoreInstaller@0
+        displayName: 'Install .NET Core'
+        inputs:
+          version: '2.2.202'
       - task: NodeTool@0
         displayName: 'Use Node 8.x'
         inputs:
@@ -18,13 +26,31 @@ jobs:
           command: custom
           verbose: false
           customCommand: 'run compile'
-      - script: 'node node_modules/vscode/bin/test'
+      - task: Npm@1
+        displayName: 'Copy test scripts'
+        inputs:
+          command: custom
+          verbose: false
+          customCommand: 'run test-scripts'
+      - task: Npm@1
+        displayName: 'Download Retina'
+        inputs:
+          command: custom
+          verbose: false
+          customCommand: 'run download-retina'
+      - script: |
+          set PATH=%PATH%;%cd%\win-x64
+          node node_modules/vscode/bin/test
         displayName: 'Run tests'
   - job: Linux
     pool:
       name: Hosted Ubuntu 1604
       demands: npm
     steps:
+      - task: DotNetCoreInstaller@0
+        displayName: 'Install .NET Core'
+        inputs:
+          version: '2.2.202'
       - task: NodeTool@0
         displayName: 'Use Node 8.x'
         inputs:
@@ -39,12 +65,26 @@ jobs:
           command: custom
           verbose: false
           customCommand: 'run compile'
+      - task: Npm@1
+        displayName: 'Copy test scripts'
+        inputs:
+          command: custom
+          verbose: false
+          customCommand: 'run test-scripts'
+      - task: Npm@1
+        displayName: 'Download Retina'
+        inputs:
+          command: custom
+          verbose: false
+          customCommand: 'run download-retina'
       - script: |
           set -e
           /usr/bin/Xvfb :10 -ac >> /tmp/Xvfb.out 2>&1 &
           disown -ar
         displayName: 'Start xvfb'
-      - script: 'node node_modules/vscode/bin/test'
+      - script: |
+          export PATH=$PATH:$(pwd)/linux-x64
+          node node_modules/vscode/bin/test
         displayName: 'Run tests'
         env:
           DISPLAY: :10
