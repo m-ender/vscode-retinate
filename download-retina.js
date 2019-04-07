@@ -3,21 +3,27 @@ const fs = require('fs');
 const tar = require('tar-fs');
 const gunzip = require('gunzip-maybe');
 
-const download = function (url, destination, callback) {
+const download = function (url, destination) {
     const file = fs.createWriteStream(destination);
     http.get(url, function (response) {
         response.pipe(file);
         file.on('finish', function () {
-            file.close(callback);
+            file.close(() => {
+                fs.createReadStream(destination).pipe(gunzip()).pipe(tar.extract("."));
+            });
         });
     });
-}
+};
 
-const url = "https://github.com/m-ender/retina/releases/download/v1.1.1/retina-linux-x64.tar.gz";
+binaries = [{
+    url: 'https://github.com/m-ender/retina/releases/download/v1.1.1/retina-win-x64.tar.gz',
+    name: 'win'
+}, {
+    url: 'https://github.com/m-ender/retina/releases/download/v1.1.1/retina-linux-x64.tar.gz',
+    name: 'linux'
+}];
 
 console.log("Downloading...");
-download(url, "file.tar.gz", () => {
-    console.log("Unpacking...");
-    fs.createReadStream("file.tar.gz").pipe(gunzip()).pipe(tar.extract("."));
-    console.log("Ok.");
-});
+for (binary of binaries) {
+    download(binary['url'], binary['name']);
+}
