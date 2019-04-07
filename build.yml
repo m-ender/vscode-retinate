@@ -24,6 +24,12 @@ jobs:
           verbose: false
           customCommand: 'run compile'
       - task: Npm@1
+        displayName: 'Copy test scripts'
+        inputs:
+          command: custom
+          verbose: false
+          customCommand: 'run test-scripts'
+      - task: Npm@1
         displayName: 'Download Retina'
         inputs:
           command: custom
