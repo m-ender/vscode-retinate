@@ -12,21 +12,34 @@ const platforms = Object.keys(process.env)
 const template = 'https://github.com/m-ender/retina/releases/download/%s/retina-%s.tar.gz';
 const directory = 'bin';
 
+function download(url, destination) {
+    return new Promise((resolve, reject) => {
+        http.get(url, response => {
+            const file = fs.createWriteStream(destination);
+            response.pipe(file);
+            file.on('finish', () => file.close(() => resolve(destination)));
+            file.on('error', error => reject(error));
+        });
+    });
+}
+
+function untar(path) {
+    return new Promise((resolve, reject) => {
+        const file = fs.createReadStream(path);
+        const pipe = file.pipe(gunzip()).pipe(tar.extract(directory));
+        pipe.on('finish', () => resolve(path));
+        pipe.on('error', error => reject(error));
+    });
+}
+
 if (!fs.existsSync(directory)) {
     fs.mkdirSync(directory);
 }
 
-const download = function (url, destination) {
-    const file = fs.createWriteStream(destination);
-    http.get(url, function (response) {
-        response.pipe(file);
-        file.on('finish', function () {
-            file.close(() => {
-                fs.createReadStream(destination).pipe(gunzip()).pipe(tar.extract(directory));
-            });
-        });
-    });
-};
-
-console.log(`Downloading version ${version} for platforms [${platforms}]...`);
-platforms.forEach(platform => download(format(template, version, platform), `${directory}/${platform}.tmp`));
+console.log(`Downloading version [${version}] to [${directory}] for platforms [${platforms}]...`);
+platforms.forEach(platform => {
+    download(format(template, version, platform), `${directory}/${platform}.tmp`)
+        .then(untar)
+        .then(() => console.log(`Successfully downloaded and unpacked [${platform}]`))
+        .catch(console.error);
+});
