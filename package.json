@@ -109,6 +109,13 @@
 			}
 		}
 	},
+	"retina": {
+		"version": "v1.1.1",
+		"platforms": [
+			"win-x64",
+			"linux-x64"
+		]
+	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"postinstall": "node ./node_modules/vscode/bin/install",
