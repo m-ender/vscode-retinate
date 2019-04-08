@@ -39,7 +39,7 @@ jobs:
           verbose: false
           customCommand: 'run download-retina'
       - script: |
-          set PATH=%PATH%;%cd%\win-x64
+          set PATH=%PATH%;%cd%\bin\win-x64
           node node_modules/vscode/bin/test
         displayName: 'Run tests'
   - job: Linux
@@ -83,7 +83,7 @@ jobs:
           disown -ar
         displayName: 'Start xvfb'
       - script: |
-          export PATH=$PATH:$(pwd)/linux-x64
+          export PATH=$PATH:$(pwd)/bin/linux-x64
           node node_modules/vscode/bin/test
         displayName: 'Run tests'
         env:
