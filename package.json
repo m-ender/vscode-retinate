@@ -4,6 +4,10 @@
 	"description": "Use Retina to transform your documents.",
 	"version": "0.1.0",
 	"publisher": "m-ender",
+	"author": "Martin Ender",
+	"contributors": [
+		"Lukas Niemeier"
+	],
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/m-ender/vscode-retinate"
