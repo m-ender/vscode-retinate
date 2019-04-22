@@ -39,3 +39,23 @@ Retinate comes with a few settings:
 | retinate.retinaPath    | Path to your Retina executable. Leave as `Retina` if Retina is on your system PATH. | "Retina" | string |
 | retinate.timeout       | Time before Retinate kills any Retina process, in seconds.                          | 3        | number |
 | retinate.maxOutputSize | Maximum number of bytes that any one invocation of Retina is allowed to return      | 204800   | number |
+
+## Examples
+
+Here are some examples of what you can use Retina(te) for, but they barely even scratch the surface.
+
+**Sort the lines of a document. Or shuffle them:**
+
+![Sort and shuffle lines][example-sort-and-shuffle]
+
+**Reverse array literals:**
+
+![Reverse arrays][example-reverse-arrays]
+
+**Insert evenly padded line numbers:**
+
+![Insert line numbers][example-line-numbers]
+
+[example-sort-and-shuffle]: https://github.com/m-ender/vscode-retinate/raw/master/img/example-sort-and-shuffle.gif
+[example-reverse-arrays]: https://github.com/m-ender/vscode-retinate/raw/master/img/example-reverse-arrays.gif
+[example-line-numbers]: https://github.com/m-ender/vscode-retinate/raw/master/img/example-line-numbers.gif
