@@ -2,7 +2,7 @@
 	"name": "retinate",
 	"displayName": "Retinate",
 	"description": "Use Retina to transform your documents.",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"publisher": "m-ender",
 	"author": "Martin Ender",
 	"contributors": [
@@ -114,7 +114,7 @@
 		}
 	},
 	"retina": {
-		"version": "v1.1.1",
+		"version": "v1.2.0",
 		"platforms": [
 			"win-x64",
 			"linux-x64"
